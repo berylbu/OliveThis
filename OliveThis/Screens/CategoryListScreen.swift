@@ -29,7 +29,7 @@ struct CategoryListScreen: View {
         
         ZStack {
             if store.categories.isEmpty && !isLoading {
-                ContentUnavailableView("No Categories Found", systemImage: "viewfinder.rectangular")
+                ContentUnavailableView("No Categories were Found", systemImage: "viewfinder.rectangular")
             }
             else {
                 List(store.categories) { category in
