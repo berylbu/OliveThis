@@ -8,33 +8,32 @@ import Foundation
 import Security
 
 struct Keychain<T: Codable> {
-    static func set (_ value: T, forKey key: String) {
+    static func set(_ value: T, forKey key: String) {
         do {
             let data = try JSONEncoder().encode(value)
-            let query: [CFString: Any ] = [
+            let query: [CFString: Any] = [
                 kSecClass: kSecClassGenericPassword,
-                kSecAttrAccount: key as CFString,
+                kSecAttrAccount: key,
                 kSecValueData: data
             ]
             
-            SecItemDelete(query as CFDictionary) //delete existing data if any
+            SecItemDelete(query as CFDictionary) // Delete existing data (if any)
             
             let status = SecItemAdd(query as CFDictionary, nil)
             if status != errSecSuccess {
-                print ("Error saving data to keychain: \(status)")
+                print("Error loading item to keychain \(status)")
             }
-        }
-        catch {
-            print ("Error encoding data for keychain: \(error)")
+        } catch {
+            print("Error encoding data: \(error)")
         }
     }
     
-    static func get (_ key: String) -> T? {
-         let query: [CFString: Any ] = [
+    static func get(_ key: String) -> T? {
+        let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrAccount: key as CFString,
-            kSecMatchLimit: kSecMatchLimitOne,
-            kSecReturnData: kCFBooleanTrue as Any
+            kSecAttrAccount: key,
+            kSecReturnData: kCFBooleanTrue as Any,
+            kSecMatchLimit: kSecMatchLimitOne
         ]
         
         var item: CFTypeRef?
@@ -44,16 +43,15 @@ struct Keychain<T: Codable> {
             do {
                 let value = try JSONDecoder().decode(T.self, from: data)
                 return value
-            }
-            catch {
-                print ("Error decoding data from keychain: \(error)")
+            } catch {
+                print("Error decoding data: \(error)")
             }
         }
         return nil
     }
     
-    static func delete (_ key: String) -> Bool {
-        let query: [CFString: Any ] = [
+    static func delete(_ key: String) -> Bool {
+        let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: key
         ]
@@ -61,6 +59,4 @@ struct Keychain<T: Codable> {
         let status = SecItemDelete(query as CFDictionary)
         return status == errSecSuccess
     }
-    
 }
-

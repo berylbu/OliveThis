@@ -9,49 +9,64 @@ import SwiftUI
 
 struct RegistrationScreen: View {
     
-    @Environment(\.authenticationController) var authenticationController
+    @Environment(\.authenticationController) private var authenticationController
     
     @State private var registrationForm = RegistrationForm()
     @State private var messageText: String?
-    @State private var errors: [String] = []
     
     private func register() async {
         do {
-            let response = try await authenticationController.register(name: registrationForm.name, email: registrationForm.email, password: registrationForm.password)
-            messageText = "✅ Registration successful! Welcome, \(response.name)!"
-        }
-        catch {
-            messageText = "❌ Registration failed: \(error.localizedDescription)"
+            let response = try await authenticationController.register(
+                name: registrationForm.name,
+                email: registrationForm.email,
+                password: registrationForm.password
+            )
+            messageText = "✅ Registration for user \(response.name) is completed."
+        } catch {
+            messageText = "❌ \(error.localizedDescription)"
         }
     }
     
     var body: some View {
-        Form {
-            TextField("Name", text: $registrationForm.name)
-            TextField("Email", text: $registrationForm.email)
-            SecureField("Password", text: $registrationForm.password)
-            SecureField("Confirm Password", text: $registrationForm.confirm)
-            Button("Register") {
-                errors = registrationForm.validate()
-
-                if errors.isEmpty {
-                  Task { await register()}
+        NavigationStack {
+            Form {
+                Section(header: Text("Create Account")) {
+                    TextField("Name", text: $registrationForm.name)
+                        .textContentType(.name)
+                        .autocapitalization(.words)
+                    
+                    TextField("Email", text: $registrationForm.email)
+                        .keyboardType(.emailAddress)
+                        .textContentType(.emailAddress)
+                        .autocapitalization(.none)
+                    
+                    SecureField("Password", text: $registrationForm.password)
+                        .textContentType(.newPassword)
                 }
-              
-            } //.disabled(!registrationForm.isValid)
-            
-            if let messageText {
-                Text(messageText)
-                    .foregroundColor(messageText.contains("failed") ? .red : .green)
-                    .multilineTextAlignment(.center)
+                
+                Section {
+                    Button(action: {
+                        Task { await register() }
+                    }) {
+                        Text("Register")
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    .disabled(!registrationForm.isValid)
+                }
+                
+                if let messageText {
+                    Section {
+                        Text(messageText)
+                            .foregroundColor(messageText.contains("❌") ? .red : .green)
+                            .multilineTextAlignment(.center)
+                    }
+                }
             }
-            
-            if !errors.isEmpty {
-                ValidationSummaryView(errors: errors)
-            }
+            .navigationTitle("Register")
         }
     }
 }
+
 
 extension RegistrationScreen {
     
@@ -59,38 +74,40 @@ extension RegistrationScreen {
         var name: String = "John Doe"
         var email: String = "johndoe@gmail.com"
         var password: String = "password1234"
-        var confirm: String = ""
         
         var isValid: Bool {
             validate().isEmpty
         }
         
         func validate() -> [String] {
+            
             var errors: [String] = []
+            
             if name.isEmptyOrWhitespace {
-                errors.append("Name cannot be empty")
+                errors.append("Name cannot be empty.")
             }
             
             if email.isEmptyOrWhitespace {
-                errors.append("Email cannot be empty")
+                errors.append("Email cannot be empty.")
             }
+            
             if password.isEmptyOrWhitespace {
-                errors.append( "Password cannot be empty")
+                errors.append("Password cannot be empty.")
             }
+            
             if !password.isValidPassword {
-                errors.append("Password must be at least 8 characters long")
+                errors.append("Password must be at least 8 characters long.")
             }
-            if password != confirm {
-                errors.append("Password and confirmation password must match")
-            }
+            
             if !email.isEmail {
-                errors.append("Email must be in correct format")
+                errors.append("Email must be in correct format.")
             }
             
             return errors
-            
         }
+        
     }
+    
 }
 
 #Preview {

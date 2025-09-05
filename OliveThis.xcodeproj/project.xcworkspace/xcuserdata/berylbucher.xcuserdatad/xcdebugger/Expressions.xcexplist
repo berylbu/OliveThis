@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "CategoryListScreen.loadCategories():CategoryListScreen.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in CategoryListScreen.body.getter:CategoryListScreen.swift">
+      </ContextState>
+      <ContextState
+         contextName = "HTTPClient.performRequest&lt;[OliveThis.Category]&gt;(_:):HTTPClient.swift">
+      </ContextState>
+      <ContextState
+         contextName = "HTTPClient.load&lt;OliveThis.LoginResponse&gt;(_:):HTTPClient.swift">
+      </ContextState>
+      <ContextState
+         contextName = "HTTPClient.load&lt;[OliveThis.Category]&gt;(_:):HTTPClient.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AuthenticationController.login(email:password:):AuthenticationController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "LoginScreen.login():LoginScreen.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

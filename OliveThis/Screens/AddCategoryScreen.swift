@@ -17,32 +17,31 @@ struct AddCategoryScreen: View {
     private func createCategory() async {
         
         defer { isLoading = false }
+        
         do {
             isLoading = true
             try await store.createCategory(name: name)
             dismiss()
-        }
-        catch {
-            print (error.localizedDescription)
+        } catch {
+            print(error.localizedDescription)
         }
     }
     
     private var isFormValid: Bool {
         !name.isEmptyOrWhitespace
     }
-
+    
     var body: some View {
         Form {
-            TextField("Category Name", text: $name)
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            TextField("Name", text: $name)
+        }.toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button("Save") {
                     Task { await createCategory() }
                 }.disabled(!isFormValid || isLoading)
             }
         }
-        .navigationTitle(Text("Add Category"))
+        .navigationTitle("Add Category")
     }
 }
 

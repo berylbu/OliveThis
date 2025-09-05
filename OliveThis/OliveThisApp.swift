@@ -10,9 +10,7 @@ import SwiftUI
 @main
 struct OliveThisApp: App {
     
-    @AppStorage("isAuthenticated") var isAuthenticated: Bool = false
-    //@AppStorage("userID") var userID: String?
-    
+    @AppStorage("isAuthenticated") private var isAuthenticated: Bool = false
     @Environment(\.authenticationController) private var authenticationController
     @State private var isLoading: Bool = true
     
@@ -25,13 +23,11 @@ struct OliveThisApp: App {
                             isAuthenticated = await authenticationController.checkAuthentication()
                             isLoading = false
                         }
-                }
-                else if isAuthenticated {
+                } else if isAuthenticated {
                     HomeScreen()
-                }
-                else {
+                        .environment(OliveThisStore(httpClient: HTTPClient()))
+                } else {
                     VStack {
-                        //debug only
                         RegistrationScreen()
                         LoginScreen()
                     }

@@ -21,7 +21,7 @@ struct HomeScreen: View {
             
             Tab {
                 NavigationStack {
-                    Text("Locations")
+                    LocationsScreen()
                 }
             } label: {
                 Label("Locations", systemImage: "map")
@@ -29,7 +29,7 @@ struct HomeScreen: View {
             
             Tab {
                 NavigationStack {
-                    Text("Profile")
+                    ProfileScreen()
                 }
             } label: {
                 Label("Profile", systemImage: "person.crop.circle")

@@ -9,15 +9,16 @@ import Foundation
 
 struct AuthenticationController {
     
-    //if mocking, use HTTPClientProtocol
+    // If mocking then use HTTPClientProtocol
     let httpClient: HTTPClient
     
     func checkAuthentication() async -> Bool {
+        
         guard let accessToken: String = Keychain.get("accessToken") else {
             return false
         }
         
-        //check if access token is expired
+        // check if access token is expired
         if JWTDecoder.isExpired(token: accessToken) {
             do {
                 try await httpClient.refreshToken()
@@ -50,10 +51,14 @@ struct AuthenticationController {
         let resource = Resource(url: Constants.Urls.login, method: .post(try request.encode()), modelType: LoginResponse.self)
         let response = try await httpClient.load(resource)
         
+        print(response.accessToken)
+        print(response.refreshToken)
+        
         // save the access and refresh token in Keychain
         Keychain.set(response.accessToken, forKey: "accessToken")
         Keychain.set(response.refreshToken, forKey: "refreshToken")
-       
+        
         return true
     }
+    
 }

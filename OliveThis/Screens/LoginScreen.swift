@@ -9,8 +9,8 @@ import SwiftUI
 
 struct LoginScreen: View {
     
-    @State private var email: String = "johndoe@gmail.com"
-    @State private var password: String = "password1234"
+    @State private var email: String = "test@test.com"
+    @State private var password: String = "password"
     @AppStorage("isAuthenticated") private var isAuthenticated: Bool = false
     
     @Environment(\.authenticationController) private var authenticationController

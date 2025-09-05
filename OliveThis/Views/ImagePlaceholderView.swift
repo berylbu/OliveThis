@@ -8,23 +8,21 @@
 import SwiftUI
 
 struct ImagePlaceholderView: View {
-    
     var width: CGFloat = 75
     var height: CGFloat = 75
-    
+
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color.secondary.opacity(0.15))
+            RoundedRectangle(cornerRadius: 16.0, style: .continuous)
+                .fill(Color.gray.opacity(0.15))
                 .frame(width: width, height: height)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16.0, style: .continuous)
-                        .stroke(Color.secondary.opacity(0.4), lineWidth: 1)
-                        .font(.system(size:24))
-                    )
+                        .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                )
             Image(systemName: "photo")
-                .foregroundColor(.secondary.opacity(0.4))
-                .font(.system(size:24))
+                .foregroundColor(.gray.opacity(0.4))
+                .font(.system(size: 24))
         }
     }
 }

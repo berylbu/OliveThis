@@ -29,21 +29,24 @@ struct CategoryListScreen: View {
         
         ZStack {
             if store.categories.isEmpty && !isLoading {
-                ContentUnavailableView("No Categories were Found", systemImage: "viewfinder.rectangular")
-            }
-            else {
+                ContentUnavailableView("No products available", systemImage: "shippingbox")
+            } else {
                 List(store.categories) { category in
-                    CategoryCellView(category: category)
+                    NavigationLink {
+                        ProductListScreen(category: category)
+                    } label: {
+                        CategoryCellView(category: category)
+                    }
                 }
             }
         }
         .overlay(alignment: .center, content: {
             if isLoading {
-                ProgressView("Loading ...")
+                ProgressView("Loading...")
             }
         })
         .toolbar(content: {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button("Add Category") {
                     showAddCategoryScreen = true
                 }
@@ -57,7 +60,7 @@ struct CategoryListScreen: View {
         .task {
             await loadCategories()
         }
-        .navigationTitle(Text("Categories"))
+        .navigationTitle("Categories")
     }
 }
 
@@ -73,14 +76,22 @@ struct CategoryCellView: View {
     
     var body: some View {
         HStack {
-            AsyncImage(url: category.image) { img in
-                img.resizable()
-                    .frame(width: 75, height: 75)
-                    .clipShape(RoundedRectangle(cornerRadius: 16.0, style: .continuous))
-            } placeholder: {
-                ImagePlaceholderView()
+            if category.link == nil {
+                Image(systemName: "folder")
+                    .foregroundColor(.gray)
             }
-            Text(category.name)
+            else {
+                let imageURL = category.link!
+                AsyncImage(url: imageURL) { img in
+                    img.resizable()
+                        .frame(width: 75, height: 75)
+                        .clipShape(RoundedRectangle(cornerRadius: 16.0, style: .continuous))
+                } placeholder: {
+                    ImagePlaceholderView()
+                }
+            }
+            
+            Text(category.categoryName)
         }
     }
 }
