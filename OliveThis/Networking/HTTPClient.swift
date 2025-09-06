@@ -108,6 +108,11 @@ struct HTTPClient {
                 throw NetworkError.undefined(data, httpResponse)
         }
         
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print(resource.modelType)
+            print(jsonString)
+        }
+        
         do {
             return try JSONDecoder().decode(resource.modelType, from: data)
         } catch {

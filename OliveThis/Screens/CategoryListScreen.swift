@@ -29,11 +29,11 @@ struct CategoryListScreen: View {
         
         ZStack {
             if store.categories.isEmpty && !isLoading {
-                ContentUnavailableView("No products available", systemImage: "shippingbox")
+                ContentUnavailableView("No Categories available", systemImage: "shippingbox")
             } else {
                 List(store.categories) { category in
                     NavigationLink {
-                        ProductListScreen(category: category)
+                        SubcategoryListScreen(category: category)
                     } label: {
                         CategoryCellView(category: category)
                     }

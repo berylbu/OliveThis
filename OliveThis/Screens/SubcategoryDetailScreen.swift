@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct SubcategoryDetailScreen: View {
+    
+    let subcategory: Subcategory
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("Subcategory Detail Screen")
     }
 }
 
 #Preview {
-    SubcategoryDetailScreen()
+    NavigationStack {
+        ProductDetailScreen(product: Product.preview)
+    }
 }

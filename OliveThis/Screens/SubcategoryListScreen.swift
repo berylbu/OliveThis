@@ -8,11 +8,111 @@
 import SwiftUI
 
 struct SubcategoryListScreen: View {
+    
+    let category: Category
+    
+    @Environment(OliveThisStore.self) private var store
+    @State private var subcategories: [Subcategory] = []
+    @State private var isLoading: Bool = false
+    @State private var showAddProductScreen: Bool = false
+    
+    private func loadSubcategories() async {
+        
+        guard !isLoading else { return }
+        isLoading = true
+        defer { isLoading = false }
+        
+        do {
+            subcategories = try await store.fetchSubcategoriesByCat(category.id)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func deleteSubcategory(_ indexSet: IndexSet) {
+        indexSet.forEach { index in
+            let subcategory = subcategories[index]
+            Task {
+                let isDeleted = try await store.deleteSubcategory(subcategory.id)
+                if isDeleted {
+                    subcategories.remove(atOffsets: indexSet)
+                }
+            }
+        }
+    }
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        ZStack {
+            if subcategories.isEmpty && !isLoading {
+                ContentUnavailableView("No subcategories available", systemImage: "shippingbox")
+            } else {
+                List {
+                    ForEach(subcategories) { subcat in
+                        NavigationLink {
+                            SubcategoryDetailScreen(subcategory: subcat)
+                        } label: {
+                            SubcatCellView(subcategory: subcat)
+                        }
+                    }.onDelete(perform: deleteSubcategory)
+                }.refreshable {
+                    await loadSubcategories()
+                }
+            }
+        }
+        .overlay(alignment: .center, content: {
+            if isLoading {
+                ProgressView("Loading...")
+            }
+        })
+        .sheet(isPresented: $showAddProductScreen, content: {
+            NavigationStack {
+//                AddProductScreen(selectedCategoryId: category.id) { product in
+//                    products.append(product)
+//                }
+            }
+        })
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Add Subcategory") {
+                    showAddProductScreen = true
+                }
+            }
+        }
+        .task {
+            await loadSubcategories()
+        }.navigationTitle(category.categoryName)
+    }
+}
+
+struct SubcatCellView: View {
+    
+    let subcategory: Subcategory
+    
+    var body: some View {
+        HStack {
+            if subcategory.link == nil {
+                Image(systemName: "folder")
+                    .foregroundColor(.gray)
+            }
+            else {
+                let imageURL = subcategory.link!
+                AsyncImage(url: imageURL) { img in
+                    img.resizable()
+                        .frame(width: 75, height: 75)
+                        .clipShape(RoundedRectangle(cornerRadius: 16.0, style: .continuous))
+                } placeholder: {
+                    ImagePlaceholderView()
+                }
+            }
+            
+            Text(subcategory.subcategoryName)
+        }
     }
 }
 
 #Preview {
-    SubcategoryListScreen()
+    NavigationStack {
+        SubcategoryListScreen(category: Category(categoryID: 1, categoryName: "Test", categoryDescription: "Test", link: URL.randomImageURL, iconattribution: ""))
+    }.environment(OliveThisStore(httpClient: HTTPClient()))
 }

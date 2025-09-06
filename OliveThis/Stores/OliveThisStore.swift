@@ -21,7 +21,6 @@ class OliveThisStore {
     }
     
     func loadCategories() async throws {
-        //let resosurce = Resource(url: Constants.Urls.categories, modelType: [Category].self)
         let resource = Resource(url: Constants.Urls.categories, modelType: CatResponse.self)
         let catResponse = try await httpClient.load(resource)
         categories = catResponse.data ?? []
@@ -34,8 +33,22 @@ class OliveThisStore {
         categories.append(category)
     }
     
+    func fetchSubcategoriesByCat(_ categoryId: Int) async throws -> [Subcategory] {
+        let queryItems = [URLQueryItem(name: "categoryId", value: String(categoryId))]
+        let resource = Resource(url: Constants.Urls.getSubcategoriesByCategory(categoryId), method: .get(queryItems), modelType: SubcatResponse.self)
+        let subcatResponse = try await httpClient.load(resource)
+        return subcatResponse.data ?? []
+    }
+    
+    func deleteSubcategory(_ productId: Int) async throws -> Bool {
+//        let resource = Resource(url: Constants.Urls.deleteProduct(productId), method: .delete, modelType: Bool.self)
+//        return try await httpClient.load(resource)
+        return true
+    }
+    
     func fetchProductsBy(_ categoryId: Int) async throws -> [Product] {
-        let resource = Resource(url: Constants.Urls.getProductsByCategory(categoryId), modelType: [Product].self)
+        let queryItems = [URLQueryItem(name: "categoryId", value: String(categoryId))]
+        let resource = Resource(url: Constants.Urls.getProductsByCategory(categoryId), method: .get(queryItems), modelType: [Product].self)
         return try await httpClient.load(resource)
     }
     
