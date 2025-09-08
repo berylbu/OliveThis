@@ -8,19 +8,23 @@
 import Foundation
 
 struct RegistrationResponse: Codable {
+    var data: Registration? = nil
+    var error: APIError? = nil
+}
+
+struct Registration: Codable {
+    let firstName: String
+    let lastName: String
     let email: String
     let password: String
-    let name: String
-    let avatar: URL
-    let role: String
     let id: Int
 }
 
 struct RegistrationRequest: Codable {
-    let name: String
+    let firstName: String
+    let lastName: String
     let email: String
     let password: String
-    let avatar: URL
 }
 
 struct LoginRequest: Codable {

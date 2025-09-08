@@ -20,17 +20,12 @@ class OliveThisStore {
         self.httpClient = httpClient
     }
     
+    
+    // META DATA
     func loadCategories() async throws {
         let resource = Resource(url: Constants.Urls.categories, modelType: CatResponse.self)
         let catResponse = try await httpClient.load(resource)
         categories = catResponse.data ?? []
-    }
-    
-    func createCategory(name: String) async throws {
-        let createCategoryRequest = CreateCategoryRequest(name: name, image: URL.randomImageURL)
-        let resource = Resource(url: Constants.Urls.createCategory, method: .post(try createCategoryRequest.encode()), modelType: Category.self)
-        let category = try await httpClient.load(resource)
-        categories.append(category)
     }
     
     func fetchSubcategoriesByCat(_ categoryId: Int) async throws -> [Subcategory] {
@@ -40,6 +35,28 @@ class OliveThisStore {
         return subcatResponse.data ?? []
     }
     
+    // USER SPECIFIC INFORMATION
+    func loadUserCategories() async throws {
+        let resource = Resource(url: Constants.Urls.userCategories, modelType: CatResponse.self)
+        let catResponse = try await httpClient.load(resource)
+        categories = catResponse.data ?? []
+    }
+    
+    func fetchUserSubcategoriesByCat(_ categoryId: Int) async throws -> [Subcategory] {
+        let queryItems = [URLQueryItem(name: "categoryId", value: String(categoryId))]
+        let resource = Resource(url: Constants.Urls.getSubcategoriesByCategory(categoryId), method: .get(queryItems), modelType: SubcatResponse.self)
+        let subcatResponse = try await httpClient.load(resource)
+        return subcatResponse.data ?? []
+    }
+    
+    func createCategory(name: String) async throws {
+        let createCategoryRequest = CreateCategoryRequest(name: name, image: URL.randomImageURL)
+        let resource = Resource(url: Constants.Urls.createCategory, method: .post(try createCategoryRequest.encode()), modelType: Category.self)
+        let category = try await httpClient.load(resource)
+        categories.append(category)
+    }
+    
+ 
     func deleteSubcategory(_ productId: Int) async throws -> Bool {
 //        let resource = Resource(url: Constants.Urls.deleteProduct(productId), method: .delete, modelType: Bool.self)
 //        return try await httpClient.load(resource)

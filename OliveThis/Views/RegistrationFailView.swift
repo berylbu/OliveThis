@@ -7,27 +7,23 @@
 
 import SwiftUI
 
-struct RegistrationResultView: View {
-    let regStatus: RegistrationStatus
+struct RegistrationFailView: View {
+
     let messageText: String
-    let verifyCode: Int?
     
     var body: some View {
         
         NavigationStack {
-            if regStatus == RegistrationStatus.success {
-                RegistrationSuccess()
-            }
-            else {
-                Text("Registration Result")
+                Text("Registration Result !!!")
                     .font(.headline)
-            }
+                    .padding()
             Text(messageText)
-            
+                .foregroundColor(.red)
+                .padding(.horizontal)
         }
     }
 }
 
 #Preview {
-    RegistrationResultView(regStatus: .failed, messageText: "Already exists", verifyCode: 1234)
+    RegistrationFailView(messageText: "Already exists")
 }

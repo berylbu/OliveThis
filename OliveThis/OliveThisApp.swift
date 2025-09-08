@@ -27,10 +27,11 @@ struct OliveThisApp: App {
                     HomeScreen()
                         .environment(OliveThisStore(httpClient: HTTPClient()))
                 } else {
-                    VStack {
-                        RegistrationScreen()
-                        LoginScreen()
-                    }
+//                    VStack {
+//                        RegistrationScreen()
+//                        LoginScreen()
+//                    }
+                    LoginScreen()
                 }
             }
         }

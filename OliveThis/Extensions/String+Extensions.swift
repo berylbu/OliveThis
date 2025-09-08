@@ -14,7 +14,7 @@ extension String {
     }
     
     var isValidPassword: Bool {
-        self.count > 8
+        self.count > 7
     }
     
     var isEmail: Bool {

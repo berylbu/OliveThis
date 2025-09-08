@@ -29,35 +29,49 @@ struct LoginScreen: View {
     }
     
     var body: some View {
-        Form {
-            Section(header: Text("Welcome Back").font(.headline).foregroundColor(.blue)) {
-                
-                TextField("Email", text: $email)
-                    .keyboardType(.emailAddress)
-                    .textInputAutocapitalization(.never)
-                    .foregroundColor(.primary)
-                
-                SecureField("Password", text: $password)
-                    .textInputAutocapitalization(.never)
-                    .foregroundColor(.primary)
-            }
-            .padding(.top)
-            
-            Section {
-                Button(action: {
-                    Task {await login () }
-                }) {
-                    Text("Login")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .font(.headline)
-                        .background(isFormValid ? Color.blue : Color.gray.opacity(0.5))
-                        .cornerRadius(8)
+        NavigationView {
+            Form {
+                Section(header: Text("Welcome Back").font(.headline).foregroundColor(.blue)) {
+                    
+                    TextField("Email", text: $email)
+                        .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                        .foregroundColor(.primary)
+                    
+                    SecureField("Password", text: $password)
+                        .textInputAutocapitalization(.never)
+                        .foregroundColor(.primary)
                 }
-                .disabled(!isFormValid)
-                .listRowBackground(Color.clear)
+                .padding(.top)
+                
+                Section {
+                    Button(action: {
+                        Task {await login () }
+                    }) {
+                        Text("Login")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .font(.headline)
+                            .background(isFormValid ? Color.blue : Color.gray.opacity(0.5))
+                            .cornerRadius(8)
+                    }
+                    .disabled(!isFormValid)
+                    .listRowBackground(Color.clear)
+                }
+                
+                Section {
+                    
+                    NavigationLink ( destination: ForgotPasswordScreen() ) {
+                        Text("Forgot Password?")
+                    }
+                }
+                Section {
+                    NavigationLink ( destination: RegistrationScreen() ) {
+                        Text("Register?")
+                    }
+                }
             }
         }
     }

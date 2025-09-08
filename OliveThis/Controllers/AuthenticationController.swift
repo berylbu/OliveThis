@@ -37,9 +37,9 @@ struct AuthenticationController {
         let _ = Keychain<String>.delete("refreshToken")
     }
     
-    func register(name: String, email: String, password: String) async throws -> RegistrationResponse {
+    func register(firstName: String, lastName: String, email: String, password: String) async throws -> RegistrationResponse {
         
-        let request = RegistrationRequest(name: name, email: email, password: password, avatar: URL(string: "https://picsum.photos/800")!)
+        let request = RegistrationRequest(firstName: firstName, lastName: lastName, email: email, password: password)
         let resource = Resource(url: Constants.Urls.register, method: .post(try request.encode()), modelType: RegistrationResponse.self)
         let response = try await httpClient.load(resource)
         return response

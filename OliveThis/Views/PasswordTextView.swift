@@ -8,11 +8,29 @@
 import SwiftUI
 
 struct PasswordTextView: View {
+    @Binding var text: String
+    @State var isSecure: Bool = true
+    var titleKey: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack() {
+            if isSecure {
+                SecureField(titleKey, text: $text)
+                    .textContentType(.newPassword)
+            } else {
+                TextField(titleKey, text: $text)
+                    .textContentType(.newPassword)
+           }
+            Button(action: {
+                isSecure.toggle()
+            }, label: {
+                Image(systemName: isSecure ? "eye" : "eye.slash")
+                    .foregroundColor(.black)
+            })
+        }//.padding(.horizontal, 8)
     }
 }
 
 #Preview {
-    PasswordTextView()
+    PasswordTextView(text: .constant("12345678"), titleKey: "Enter password")
 }
