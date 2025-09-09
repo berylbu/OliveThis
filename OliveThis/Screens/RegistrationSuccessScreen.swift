@@ -13,13 +13,19 @@ public struct RegistrationSuccessScreen: View {
     @State public var isVerified = false
     
     public var body: some View {
-        VStack {
+        Form {
             if !isVerified {
                 Text("✅ Registration is complete.  Please validate your email and then return to the login screen to log in.")
                     .font(.headline)
                     .padding()
                 Text("Enter the code we emailed to \(emailAddress) below:")
-                    .font(.caption)
+                    .font(.subheadline)
+                    .padding()
+                TextField("Verification Code", text: .constant(""))
+                    .padding()
+                Button("Verify") {
+                    isVerified = true
+                }
             }
             else {
                 Text("✅ Verification was successful.  Please log in.")

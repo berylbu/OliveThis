@@ -12,6 +12,7 @@ struct LoginScreen: View {
     @State private var email: String = "test@test.com"
     @State private var password: String = "password"
     @AppStorage("isAuthenticated") private var isAuthenticated: Bool = false
+    @State var selectedTag: String?
     
     @Environment(\.authenticationController) private var authenticationController
     
@@ -61,17 +62,32 @@ struct LoginScreen: View {
                     .listRowBackground(Color.clear)
                 }
                 
-                Section {
-                    
+                Button(action: {
+                }, label: {
+                    Text("forgot password?")
+                })
+                .background(
                     NavigationLink ( destination: ForgotPasswordScreen() ) {
-                        Text("Forgot Password?")
+                        EmptyView()
                     }
-                }
-                Section {
+                    )
+                
+                Button(action: {
+                }, label: {
+                    Text("Register Instead")
+                })
+                .background(
                     NavigationLink ( destination: RegistrationScreen() ) {
-                        Text("Register?")
+                        EmptyView()
+                           
                     }
-                }
+                    )
+                .frame(width:300, height: 40, alignment: .center)
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                       
+                
             }
         }
     }
