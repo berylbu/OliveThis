@@ -21,6 +21,7 @@ struct RegistrationScreen: View {
     @State private var messageText: String = ""
     @State private var regStatus = RegistrationStatus.pending
     @State var isSecure: Bool = true
+    @State private var registrationSuccess: Bool = false
 
     @State private var errors: [String] = []
 
@@ -45,7 +46,7 @@ struct RegistrationScreen: View {
                 }
                 else {
                     regStatus = .success
-                    RegistrationSuccess()
+                    registrationSuccess = true
                 }
                 
             } catch {
@@ -104,6 +105,11 @@ struct RegistrationScreen: View {
                
 
             }
+            .sheet(isPresented: $registrationSuccess, content: {
+                NavigationStack {
+                    RegistrationSuccessScreen(emailAddress: $registrationForm.email.wrappedValue, isVerified: false)
+                }
+            })
             .navigationTitle("Register")
         }
     }

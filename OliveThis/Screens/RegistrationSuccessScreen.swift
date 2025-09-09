@@ -7,17 +7,18 @@
 
 import SwiftUI
 
-struct RegistrationSuccess: View {
+public struct RegistrationSuccessScreen: View {
     
-    private var isVerified = false
+    let emailAddress: String
+    @State public var isVerified = false
     
-    var body: some View {
+    public var body: some View {
         VStack {
             if !isVerified {
                 Text("✅ Registration is complete.  Please validate your email and then return to the login screen to log in.")
                     .font(.headline)
                     .padding()
-                Text("Please verify your login code below:")
+                Text("Enter the code we emailed to \(emailAddress) below:")
                     .font(.caption)
             }
             else {
@@ -31,5 +32,5 @@ struct RegistrationSuccess: View {
 }
 
 #Preview {
-    RegistrationSuccess()
+    RegistrationSuccessScreen(emailAddress: "test@test.com", isVerified: false)
 }

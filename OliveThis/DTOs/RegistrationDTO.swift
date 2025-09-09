@@ -13,11 +13,11 @@ struct RegistrationResponse: Codable {
 }
 
 struct Registration: Codable {
+    let userToken: String
     let firstName: String
     let lastName: String
     let email: String
     let password: String
-    let id: Int
 }
 
 struct RegistrationRequest: Codable {
@@ -35,9 +35,11 @@ struct LoginRequest: Codable {
 struct LoginResponse: Codable {
     let accessToken: String
     let refreshToken: String
-    
+    let userToken: String
+
     private enum CodingKeys: String, CodingKey {
-        case accessToken = "access_token"
-        case refreshToken = "refresh_token"
+        case accessToken = "accessToken"
+        case refreshToken = "refreshToken"
+        case userToken = "userToken"
     }
 }

@@ -11,11 +11,18 @@ import MapKit
 struct RefreshTokenResponse: Codable {
     let accessToken: String
     let refreshToken: String
+    let userToken: String
     
     private enum CodingKeys: String, CodingKey {
-        case accessToken = "access_token"
-        case refreshToken = "refresh_token"
+        case accessToken = "accessToken"
+        case refreshToken = "refreshToken"
+        case userToken = "userToken"
     }
+}
+
+struct RefreshRequest: Codable {
+    let refreshToken: String
+    let userToken: String
 }
 
 struct APIError: Codable {

@@ -125,14 +125,21 @@ struct HTTPClient {
         guard let refreshToken = Keychain<String>.get("refreshToken") else {
             throw NetworkError.unauthorized
         }
+        guard let userToken = Keychain<String>.get("userToken") else {
+            throw NetworkError.unauthorized
+        }
         
-        let body = try JSONEncoder().encode(["refreshToken": refreshToken])
-        let resource = Resource(url: Constants.Urls.refreshToken, method: .post(body), modelType: RefreshTokenResponse.self)
+        let request = RefreshRequest(refreshToken: refreshToken, userToken: userToken)
+        let resource = Resource(url: Constants.Urls.refreshToken, method: .post(try request.encode()), modelType: RefreshTokenResponse.self)
+
+//        let body = try JSONEncoder().encode(["refreshToken": refreshToken], ["userToken": userToken])
+//        let resource = Resource(url: Constants.Urls.refreshToken, method: .post(body), modelType: RefreshTokenResponse.self)
         
         let response = try await performRequest(resource)
         
         Keychain.set(response.accessToken, forKey: "accessToken")
         Keychain.set(response.refreshToken, forKey: "refreshToken")
+        Keychain.set(response.userToken, forKey: "userToken")
     }
 
 }

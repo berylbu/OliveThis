@@ -21,7 +21,7 @@ struct AuthenticationController {
         // check if access token is expired
         if JWTDecoder.isExpired(token: accessToken) {
             do {
-                try await httpClient.refreshToken()
+                try await httpClient.refreshToken() //needs work - did this call work?
                 return true
             } catch {
                 return false
@@ -35,6 +35,7 @@ struct AuthenticationController {
         UserDefaults.standard.removeObject(forKey: "isAuthenticated")
         let _ = Keychain<String>.delete("accessToken")
         let _ = Keychain<String>.delete("refreshToken")
+        let _ = Keychain<String>.delete("userToken")
     }
     
     func register(firstName: String, lastName: String, email: String, password: String) async throws -> RegistrationResponse {
@@ -57,7 +58,8 @@ struct AuthenticationController {
         // save the access and refresh token in Keychain
         Keychain.set(response.accessToken, forKey: "accessToken")
         Keychain.set(response.refreshToken, forKey: "refreshToken")
-        
+        Keychain.set(response.userToken, forKey: "userToken")
+
         return true
     }
     
