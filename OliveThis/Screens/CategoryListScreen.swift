@@ -11,15 +11,15 @@ struct CategoryListScreen: View {
     
     @Environment(OliveThisStore.self) private var store
     @State private var isLoading: Bool = false
-    @State private var showAddCategoryScreen: Bool = false
+    @State private var showManageCategoriesScreen: Bool = false
     
-    private func loadCategories() async {
+    private func loadUserCategories() async {
         
         defer { isLoading = false }
         
         do {
             isLoading = true
-            try await store.loadCategories()
+            try await store.loadUserCategories()
         } catch {
             print(error.localizedDescription)
         }
@@ -47,18 +47,18 @@ struct CategoryListScreen: View {
         })
         .toolbar(content: {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Add Category") {
-                    showAddCategoryScreen = true
+                Button("Manage Categories") {
+                    showManageCategoriesScreen = true
                 }
             }
         })
-        .sheet(isPresented: $showAddCategoryScreen, content: {
+        .sheet(isPresented: $showManageCategoriesScreen, content: {
             NavigationStack {
-                AddCategoryScreen()
+                ManageCategoriesScreen()
             }
         })
         .task {
-            await loadCategories()
+            await loadUserCategories()
         }
         .navigationTitle("Categories")
     }

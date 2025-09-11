@@ -79,17 +79,17 @@ struct RegistrationScreen: View {
 
                 }
                 
-                Section {
-                    Button(action: {
-                        errors = registrationForm.validate()
-                        if errors.isEmpty {
-                            Task { await register() }
-                        }
-                    }) {
-                        Text("Register")
-                            .frame(maxWidth: .infinity, alignment: .center)
+                Button(action: {
+                    errors = registrationForm.validate()
+                    if errors.isEmpty {
+                        Task { await register() }
                     }
+                }) {
+                    Text("Register")
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
+                .buttonStyle(OlivePrimaryButtonStyle())
+                .listRowBackground(Color.clear)
                 
                 Section {
                     if !messageText.isEmpty {

@@ -36,7 +36,7 @@ struct Constants {
         }
         
         //USER DATA
-        static let userCategories = URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/categorysub/getdefaultcategories")!
+        static let userCategories = URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/usercat/getusercategories")!
         
         static func getUserSubcategoriesByCategory(_ categoryId: Int) -> URL {
             URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/categorysub/getsubcategoriesbycat")!
