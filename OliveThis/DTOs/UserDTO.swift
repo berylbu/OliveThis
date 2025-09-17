@@ -7,3 +7,27 @@
 
 import Foundation
 
+struct CatAllResponse: Codable {
+    var data: [CategoriesAll]? = nil
+    var error: APIError? = nil
+}
+
+struct CategoriesAll: Codable, Identifiable, Hashable  {
+    let categoryID: Int
+    var categoryName: String
+    var isUsed: Bool
+    
+    var id: Int {
+        categoryID
+    }
+}
+
+struct UserCatUpdateRequest: Codable {
+    var categoryID: Int
+    var sortID: Int
+}
+
+struct UserCatsUpdateRequest: Codable {
+    var userCats : [UserCatUpdateRequest]
+}
+

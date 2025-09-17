@@ -21,6 +21,15 @@ struct HomeScreen: View {
             
             Tab {
                 NavigationStack {
+                    SelectCategoriesScreen()
+                }
+            } label: {
+                Label("Test", systemImage: "circle.fill")
+            }
+            
+            
+            Tab {
+                NavigationStack {
                     LocationsScreen()
                 }
             } label: {

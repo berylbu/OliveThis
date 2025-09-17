@@ -74,6 +74,10 @@ struct HTTPClient {
             case .post(let data), .put(let data):
                 request.httpMethod = resource.method.name
                 request.httpBody = data
+                if let jsonString = String(data: data.unsafelyUnwrapped, encoding: .utf8) {
+                    print(resource.modelType)
+                    print(jsonString)
+                }
             case .delete:
                 request.httpMethod = resource.method.name
         }
@@ -83,9 +87,9 @@ struct HTTPClient {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
-        if let userToken = Keychain<String>.get("userToken") {
-            request.setValue((userToken), forHTTPHeaderField: "UserToken")
-        }
+//        if let userToken = Keychain<String>.get("userToken") {
+//            request.setValue((userToken), forHTTPHeaderField: "UserToken")
+//        }
         
         if let headers = resource.headers {
             for (key, value) in headers {

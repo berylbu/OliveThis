@@ -29,7 +29,7 @@ struct Constants {
         }
         
         //META DATA
-        static let categories = URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/categorysub/getdefaultcategories")!
+        static let categories = URL(string: "https://oliveit-bsfavb4aybuacaqb2.centralus-01.azurewebsites.net/categorysub/getdefaultcategories")!
         
         static func getSubcategoriesByCategory(_ categoryId: Int) -> URL {
             URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/categorysub/getsubcategoriesbycat")!
@@ -38,6 +38,9 @@ struct Constants {
         //USER DATA
         static let userCategories = URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/usercat/getusercategories")!
         
+        static let userCategoriesAll = URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/usercat/getallusercategories")!
+        static let updateUserCats = URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/usercat/updateusercats")!
+
         static func getUserSubcategoriesByCategory(_ categoryId: Int) -> URL {
             URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/categorysub/getsubcategoriesbycat")!
         }

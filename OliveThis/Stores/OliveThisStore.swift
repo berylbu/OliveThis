@@ -15,6 +15,7 @@ class OliveThisStore {
     let httpClient: HTTPClient
     var categories: [Category] = []
     var locations: [Location] = []
+    var categoriesAll: [CategoriesAll] = []
     
     init(httpClient: HTTPClient) {
         self.httpClient = httpClient
@@ -42,6 +43,18 @@ class OliveThisStore {
         categories = catResponse.data ?? []
     }
     
+    func loadUserCategoriesAll() async throws {
+        let resource = Resource(url: Constants.Urls.userCategoriesAll, modelType: CatAllResponse.self)
+        let catAllResponse = try await httpClient.load(resource)
+        categoriesAll = catAllResponse.data ?? []
+    }
+
+    func updateUserCategories(_ categories: [UserCatUpdateRequest]) async throws -> Bool {
+        let resource = Resource(url: Constants.Urls.updateUserCats, method: .put(try categories.encode()), modelType: CatAllResponse.self)
+        let catAllResponse = try await httpClient.load(resource)
+        return catAllResponse.error == nil ? true : false
+    }
+
     func fetchUserSubcategoriesByCat(_ categoryId: Int) async throws -> [Subcategory] {
         let queryItems = [URLQueryItem(name: "categoryId", value: String(categoryId))]
         let resource = Resource(url: Constants.Urls.getSubcategoriesByCategory(categoryId), method: .get(queryItems), modelType: SubcatResponse.self)
