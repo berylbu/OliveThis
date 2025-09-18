@@ -113,6 +113,6 @@ struct SubcatCellView: View {
 
 #Preview {
     NavigationStack {
-        SubcategoryListScreen(category: Category(categoryID: 1, categoryName: "Test", categoryDescription: "Test", link: URL.randomImageURL, iconattribution: ""))
+        SubcategoryListScreen(category: Category(categoryID: 1, categoryName: "Test", categoryDescription: "Test", link: URL.randomImageURL, iconattribution: "", sortID: 0))
     }.environment(OliveThisStore(httpClient: HTTPClient()))
 }

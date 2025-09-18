@@ -18,6 +18,6 @@ struct ManageSubcategoriesScreen: View {
 
 #Preview {
     NavigationStack {
-        ManageSubcategoriesScreen(categoriesAll: CategoriesAll(categoryID: 1, categoryName: "Test", isUsed: false))
+        ManageSubcategoriesScreen(categoriesAll: CategoriesAll(categoryID: 1, categoryName: "Test", isUsed: false, sortID: 0))
     }.environment(OliveThisStore(httpClient: HTTPClient()))
 }

@@ -16,6 +16,7 @@ struct CategoriesAll: Codable, Identifiable, Hashable  {
     let categoryID: Int
     var categoryName: String
     var isUsed: Bool
+    var sortID: Int
     
     var id: Int {
         categoryID

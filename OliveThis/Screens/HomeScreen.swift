@@ -21,19 +21,26 @@ struct HomeScreen: View {
             
             Tab {
                 NavigationStack {
-                    SelectCategoriesScreen()
+                    LocationsScreen()
                 }
             } label: {
-                Label("Test", systemImage: "circle.fill")
+                Label("Friends", systemImage: "person.3")
             }
-            
             
             Tab {
                 NavigationStack {
                     LocationsScreen()
                 }
             } label: {
-                Label("Locations", systemImage: "map")
+                Label("Recommended", systemImage: "staroflife")
+            }
+            
+            Tab {
+                NavigationStack {
+                    LocationsScreen()
+                }
+            } label: {
+                Label("Share", systemImage: "square.and.arrow.up")
             }
             
             Tab {

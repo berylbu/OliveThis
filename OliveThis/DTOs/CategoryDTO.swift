@@ -7,12 +7,13 @@
 
 import Foundation
 
-struct Category: Codable, Identifiable  {
+struct Category: Codable, Identifiable, Hashable  {
     let categoryID: Int
     let categoryName: String
     let categoryDescription: String?
     let link: URL?
     let iconattribution: String?
+    let sortID: Int
     
     var id: Int {
         categoryID
