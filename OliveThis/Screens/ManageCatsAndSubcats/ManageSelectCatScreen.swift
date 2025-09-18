@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SortCategoriesScreen: View {
+struct ManageSelectCatScreen: View {
     
     enum TopMenuOption: String, CaseIterable {
         case Viewing
@@ -15,24 +15,22 @@ struct SortCategoriesScreen: View {
     }
     
     @Environment(OliveThisStore.self) private var store
-    @Environment(\.editMode) private var editMode
-    
     @State private var isLoading: Bool = false
     @Environment(\.dismiss) private var dismiss
-    @State private var catsUser: [Category] = []
-    @State private var screenTitle: String = "Sort your category list"
+    @State private var catAll: [CategoriesAll] = []
+    @State private var screenTitle: String = "Select which categories to use"
     
     @State private var currentAction: TopMenuOption = .Viewing
     
 
     private func loadUserCategoriesAll() async {
         
-        defer { isLoading = false }
+        defer { isLoading = false } 
         
         do {
             isLoading = true
-            try await store.loadUserCategories()
-            catsUser = store.categories
+            try await store.loadUserCategoriesAll()
+            catAll = store.categoriesAll
 
         } catch {
             print(error.localizedDescription)
@@ -44,7 +42,7 @@ struct SortCategoriesScreen: View {
         if currentAction == .Viewing || currentAction == .Editing {
             
             ZStack {
-                if store.categories.isEmpty && !isLoading {
+                if store.categoriesAll.isEmpty && !isLoading {
                     ContentUnavailableView("No Categories available", systemImage: "shippingbox")
                 } else {
                     VStack {
@@ -52,15 +50,23 @@ struct SortCategoriesScreen: View {
                             .font(.headline)
                         
                         List {
-                            ForEach($catsUser, id: \.self) { $item in
-                                Text(item.categoryName)
+                            
+                            ForEach($catAll, id: \.self) { $item in
+                                HStack {
+                                    Image(systemName: $item.isUsed.wrappedValue ? "checkmark.square.fill" : "square")
+                                        .foregroundColor($item.isUsed.wrappedValue ? .blue : .gray)
+                                    Text(item.categoryName)
+                                    
+                                }
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    if currentAction == .Editing {  $item.isUsed.wrappedValue.toggle() }
+                                }
                             }
-                            .onMove(perform: move)
                         }
                     }
                 }
             }
-            .environment(\.editMode, currentAction == .Editing ? .constant(.active) : .constant(.inactive))
             .overlay(alignment: .center, content: {
                 if isLoading {
                     ProgressView("Loading...")
@@ -85,7 +91,7 @@ struct SortCategoriesScreen: View {
                     if currentAction == .Editing{
                         Button("Save") {
                             Task {
-                                await saveCats(catsUser)
+                                await saveCats(catAll)
                             }
                             currentAction = .Viewing
                         }
@@ -105,27 +111,24 @@ struct SortCategoriesScreen: View {
         }
     }
     
-    func move(from source: IndexSet, to destination: Int) {
-        catsUser.move(fromOffsets: source, toOffset: destination)
-    }
-    
-    func saveCats(_ data: [Category]) async {
+    func saveCats(_ data: [CategoriesAll]) async {
         
-        var counter = 1
         var catsRequest: [UserCatUpdateRequest] = []
 
         for cat in data {
-            let catRequest: UserCatUpdateRequest = .init(categoryID: cat.categoryID, sortID: counter)
-            catsRequest.append(catRequest)
-            counter += 1
-            print(cat.categoryName)
+            if (cat.isUsed) {
+                let catRequest: UserCatUpdateRequest = .init(categoryID: cat.categoryID, sortID: cat.sortID)
+                catsRequest.append(catRequest)
+                print(cat.categoryName)
+            }
         }
+        
     
         do {
             var isSuccess: Bool = false
             isSuccess = try await store.updateUserCategories (catsRequest)
             if (isSuccess) {
-                await loadUserCategoriesAll()
+                try await store.loadUserCategories()
                 screenTitle = "Your categories have been saved."
                 currentAction = .Viewing
             }
@@ -139,7 +142,7 @@ struct SortCategoriesScreen: View {
 
 #Preview {
     NavigationStack {
-        SortCategoriesScreen()
+        ManageSelectCatScreen()
     }.environment(OliveThisStore(httpClient: HTTPClient()))
 }
 

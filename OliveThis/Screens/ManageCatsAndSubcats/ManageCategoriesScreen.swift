@@ -26,10 +26,10 @@ struct ManageCategoriesScreen: View {
     var body: some View {
         NavigationStack {
             if (currentAction == .SelectedCats) {
-                SelectCategoriesScreen()
+                ManageSelectCatScreen()
             }
             else if (currentAction == .SortCats) {
-                SortCategoriesScreen()
+                ManageSortCatScreen()
             }
             else if (currentAction == .CatsToSubcats) {
                 
