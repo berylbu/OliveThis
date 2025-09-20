@@ -16,6 +16,7 @@ class OliveThisStore {
     var categories: [Category] = []
     var locations: [Location] = []
     var categoriesAll: [CategoriesAll] = []
+    var units: [Unit] = []
     
     init(httpClient: HTTPClient) {
         self.httpClient = httpClient
@@ -67,6 +68,13 @@ class OliveThisStore {
         let resource = Resource(url: Constants.Urls.createCategory, method: .post(try createCategoryRequest.encode()), modelType: Category.self)
         let category = try await httpClient.load(resource)
         categories.append(category)
+    }
+    
+    func fetchUnitsByCatSubcat(_ categoryId: Int, subcategoryID: Int) async throws -> [Unit] {
+        let queryItems = [URLQueryItem(name: "cat", value: String(categoryId)), URLQueryItem(name: "subcat", value: String(subcategoryID))]
+        let resource = Resource(url: Constants.Urls.getUnits, method: .get(queryItems), modelType: UnitsResponse.self)
+        let unitsResponse = try await httpClient.load(resource)
+        return unitsResponse.data ?? []
     }
     
  

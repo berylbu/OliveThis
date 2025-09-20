@@ -14,7 +14,6 @@ struct SubcategoryListScreen: View {
     @Environment(OliveThisStore.self) private var store
     @State private var subcategories: [Subcategory] = []
     @State private var isLoading: Bool = false
-    @State private var showAddProductScreen: Bool = false
     
     private func loadSubcategories() async {
         
@@ -29,17 +28,17 @@ struct SubcategoryListScreen: View {
         }
     }
     
-    private func deleteSubcategory(_ indexSet: IndexSet) {
-        indexSet.forEach { index in
-            let subcategory = subcategories[index]
-            Task {
-                let isDeleted = try await store.deleteSubcategory(subcategory.id)
-                if isDeleted {
-                    subcategories.remove(atOffsets: indexSet)
-                }
-            }
-        }
-    }
+//    private func deleteSubcategory(_ indexSet: IndexSet) {
+//        indexSet.forEach { index in
+//            let subcategory = subcategories[index]
+//            Task {
+//                let isDeleted = try await store.deleteSubcategory(subcategory.id)
+//                if isDeleted {
+//                    subcategories.remove(atOffsets: indexSet)
+//                }
+//            }
+//        }
+//    }
     
     var body: some View {
         
@@ -50,11 +49,11 @@ struct SubcategoryListScreen: View {
                 List {
                     ForEach(subcategories) { subcat in
                         NavigationLink {
-                            SubcategoryDetailScreen(subcategory: subcat)
+                            UnitListScreen(category: category, subcategory: subcat)
                         } label: {
                             SubcatCellView(subcategory: subcat)
                         }
-                    }.onDelete(perform: deleteSubcategory)
+                    }
                 }.refreshable {
                     await loadSubcategories()
                 }
@@ -65,20 +64,6 @@ struct SubcategoryListScreen: View {
                 ProgressView("Loading...")
             }
         })
-        .sheet(isPresented: $showAddProductScreen, content: {
-            NavigationStack {
-//                AddProductScreen(selectedCategoryId: category.id) { product in
-//                    products.append(product)
-//                }
-            }
-        })
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Add Subcategory") {
-                    showAddProductScreen = true
-                }
-            }
-        }
         .task {
             await loadSubcategories()
         }.navigationTitle(category.categoryName)
@@ -91,20 +76,20 @@ struct SubcatCellView: View {
     
     var body: some View {
         HStack {
-            if subcategory.link == nil {
-                Image(systemName: "folder")
-                    .foregroundColor(.gray)
-            }
-            else {
-                let imageURL = subcategory.link!
-                AsyncImage(url: imageURL) { img in
-                    img.resizable()
-                        .frame(width: 75, height: 75)
-                        .clipShape(RoundedRectangle(cornerRadius: 16.0, style: .continuous))
-                } placeholder: {
-                    ImagePlaceholderView()
-                }
-            }
+//            if subcategory.link == nil {
+//                Image(systemName: "folder")
+//                    .foregroundColor(.gray)
+//            }
+//            else {
+//                let imageURL = subcategory.link!
+//                AsyncImage(url: imageURL) { img in
+//                    img.resizable()
+//                        .frame(width: 75, height: 75)
+//                        .clipShape(RoundedRectangle(cornerRadius: 16.0, style: .continuous))
+//                } placeholder: {
+//                    ImagePlaceholderView()
+//                }
+//            }
             
             Text(subcategory.subcategoryName)
         }

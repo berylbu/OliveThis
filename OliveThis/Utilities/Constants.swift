@@ -44,6 +44,9 @@ struct Constants {
         static func getUserSubcategoriesByCategory(_ categoryId: Int) -> URL {
             URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/categorysub/getsubcategoriesbycat")!
         }
+        
+        static let getUnits = URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/userunit")!
+        
  
     }
       

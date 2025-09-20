@@ -87,10 +87,6 @@ struct HTTPClient {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
-//        if let userToken = Keychain<String>.get("userToken") {
-//            request.setValue((userToken), forHTTPHeaderField: "UserToken")
-//        }
-        
         if let headers = resource.headers {
             for (key, value) in headers {
                 request.setValue(value, forHTTPHeaderField: key)
