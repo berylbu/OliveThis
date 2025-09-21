@@ -107,4 +107,11 @@ class OliveThisStore {
         locations = try await httpClient.load(resource)
     }
     
+    
+    func createUnit(_ unit: CreateUnitRequest) async throws -> Unit? {
+       
+        let resource = Resource(url: Constants.Urls.postUnit, method: .post(try unit.encode()), modelType: UnitResponse.self)
+        let unitResponse = try await httpClient.load(resource)
+        return unitResponse.data
+    }
 }

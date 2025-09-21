@@ -10,20 +10,37 @@ import SwiftUI
 struct UnitDetailScreen: View {
     
     @State var unit: Unit
-    
+    @State private var showingDeleteAlert = false
+
     var body: some View {
-        VStack {
-            Text(unit.name)
-                .font(.largeTitle)
-            Text(unit.address ?? "")
-            Text(unit.genre ?? "")
-            RatingView(rating: .constant(unit.rating))
-                .font(.largeTitle)
-            Text(unit.notes ?? "")
-       }
-        .navigationTitle(unit.name)
-            .font(.headline)
-            .padding()
+        
+        ScrollView {
+            UnitCellView(unit: unit)
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .alert("Delete", isPresented: $showingDeleteAlert) {
+            Button("Delete", role: .destructive, action: deleteUnit)
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Are you sure?")
+        }
+     
+        .toolbar {
+            Button("Delete?", systemImage: "trash") {
+                showingDeleteAlert = true
+            }
+        }
+        .toolbar {
+            Button("Edit", systemImage: "pencil.line") {
+                showingDeleteAlert = true
+            }
+        }
+       
+        .padding()
+    }
+    
+    func deleteUnit() {
+        
     }
 }
 
@@ -33,7 +50,7 @@ struct UnitDetailScreen: View {
           categoryID: 1,
           subcategoryID: 1,
           appUserID: "userid",
-          genre: "1/1/2020",
+          genre: "burger",
           createdDate: "1/1/2020",
           lastEditedDate: "1/1/2020",
           userTried: false,
@@ -42,3 +59,33 @@ struct UnitDetailScreen: View {
           notes: "Owner is an asshole"
       ))
 }
+
+struct UnitCellView: View {
+    
+    let unit: Unit
+    
+    var body: some View {
+        
+        VStack {
+            
+            Text(unit.name.uppercased())
+                .fontWeight(.black)
+                .padding(8)
+                .foregroundStyle(.white)
+                .background(.black.opacity(0.7))
+                .clipShape(Capsule())
+        
+            Text(unit.genre ?? "")
+                .font(.title)
+                .foregroundStyle(.secondary)
+            
+            Text(unit.notes ?? "")
+                .padding()
+            
+            RatingView(rating: .constant(unit.rating))
+                .font(.largeTitle)
+            
+        }
+    }
+}
+

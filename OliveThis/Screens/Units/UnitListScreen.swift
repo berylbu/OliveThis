@@ -16,6 +16,8 @@ struct UnitListScreen: View {
     @Environment(OliveThisStore.self) private var store
     @State private var units: [Unit] = []
     @State private var isLoading: Bool = false
+    @State private var showingAddScreen = false
+
     //@State private var showDetailScreen: Bool = false
     
     private func loadUnits() async {
@@ -43,7 +45,7 @@ struct UnitListScreen: View {
                     NavigationLink {
                         UnitDetailScreen(unit: unit)
                     } label: {
-                        UnitCellView(unit: unit)
+                        UnitListCellView(unit: unit)
                     }
                 }.refreshable {
                     await loadUnits()
@@ -55,22 +57,30 @@ struct UnitListScreen: View {
                 ProgressView("Loading...")
             }
         })
+        .sheet(isPresented: $showingAddScreen, content: {
+            NavigationStack {
+                AddUnitScreen(categoryID: category.categoryID, subcategoryID: subcategory.subcategoryID)
+            }
+        })
         .task {
             await loadUnits()
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Add", systemImage: "plus") {
+                    showingAddScreen.toggle()
+                }
+            }
         }
         .navigationTitle(subcategory.subcategoryName)
     }
 }
 
 #Preview {
-    NavigationStack {
-        UnitListScreen(
-            category: Category(categoryID: 1, categoryName: "Food", categoryDescription: "Restaurants, recipes, etc.", link: nil, iconattribution: "", sortID: 1),
-            subcategory: Subcategory(subcategoryID: 1, categoryID: 1, subcategoryName: "Dairy", subcategoryDescription: "Milk, cheese, etc.", link: nil, iconattribution: nil))
-    }.environment(OliveThisStore(httpClient: HTTPClient()))
+    CategoryListScreen()
 }
 
-struct UnitCellView: View {
+struct UnitListCellView: View {
     
     let unit: Unit
     

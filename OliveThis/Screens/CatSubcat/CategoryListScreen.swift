@@ -11,7 +11,6 @@ struct CategoryListScreen: View {
     
     @Environment(OliveThisStore.self) private var store
     @State private var isLoading: Bool = false
-    @State private var showManageCategoriesScreen: Bool = false
     
     private func loadUserCategories() async {
         
@@ -43,18 +42,6 @@ struct CategoryListScreen: View {
         .overlay(alignment: .center, content: {
             if isLoading {
                 ProgressView("Loading...")
-            }
-        })
-//        .toolbar(content: {
-//            ToolbarItem(placement: .topBarTrailing) {
-//                Button("Manage Categories") {
-//                    showManageCategoriesScreen = true
-//                }
-//            }
-//        })
-        .sheet(isPresented: $showManageCategoriesScreen, content: {
-            NavigationStack {
-                ManageCategoriesScreen()
             }
         })
         .task {

@@ -83,6 +83,41 @@ struct Unit: Codable, Identifiable, Hashable  {
     }
 }
 
+struct CreateUnitRequest: Codable {
+    
+    let categoryID:  Int
+    let subcategoryID: Int
+    
+    let genre: String?
+    
+    let userTried: Bool
+    let rating: Int
+    
+    let name: String
+    let notes: String?
+    
+    let personFirstName: String?
+    let personLastName: String?
+    let secondPersonFirstName: String?
+    let secondPersonLastName: String?
+    
+    let address1: String?
+    let address2: String?
+    let city: String?
+    let region: String?
+    let postalCode: String?
+    
+    let telephoneNumber: String?
+    let telephoneNumber2: String?
+    let webLink: String?
+    let imageLink: String?
+    
+    let recByFirstName: String?
+    let recByLastName: String?
+    let recByAppUserID: String?
+ 
+}
+
 
 
 
