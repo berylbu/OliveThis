@@ -45,13 +45,13 @@ struct CategoryListScreen: View {
                 ProgressView("Loading...")
             }
         })
-        .toolbar(content: {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Manage Categories") {
-                    showManageCategoriesScreen = true
-                }
-            }
-        })
+//        .toolbar(content: {
+//            ToolbarItem(placement: .topBarTrailing) {
+//                Button("Manage Categories") {
+//                    showManageCategoriesScreen = true
+//                }
+//            }
+//        })
         .sheet(isPresented: $showManageCategoriesScreen, content: {
             NavigationStack {
                 ManageCategoriesScreen()

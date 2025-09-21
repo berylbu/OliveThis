@@ -24,6 +24,8 @@ struct Unit: Codable, Identifiable, Hashable  {
     var subcategoryID: Int
     var appUserID: String
     
+    var genre: String?
+    
     var createdDate: String
     var lastEditedDate: String
     
@@ -55,6 +57,29 @@ struct Unit: Codable, Identifiable, Hashable  {
     
     var id: Int64 {
         unitID
+    }
+    
+    var address: String? {
+        var addressString = ""
+        
+        if let address1 = address1 {
+            addressString += address1
+        }
+        if let address2 = address2 {
+            addressString += ", \(address2)"
+        }
+       
+        if let city = city {
+            addressString += ", \(city)"
+        }
+        if let region = region {
+            addressString += ", \(region)"
+        }
+        if let postalCode = postalCode {
+            addressString += " \(postalCode)"
+        }
+        
+        return addressString
     }
 }
 

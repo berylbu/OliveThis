@@ -32,7 +32,7 @@ struct HomeScreen: View {
                     LocationsScreen()
                 }
             } label: {
-                Label("Recommended", systemImage: "staroflife")
+                Label("Recs to Follow", systemImage: "staroflife")
             }
             
             Tab {
@@ -45,10 +45,10 @@ struct HomeScreen: View {
             
             Tab {
                 NavigationStack {
-                    ProfileScreen()
+                    AccountScreen()
                 }
             } label: {
-                Label("Profile", systemImage: "person.crop.circle")
+                Label("Account", systemImage: "person.crop.circle")
             }
         }
     }
