@@ -12,9 +12,8 @@ struct UnitListScreen: View {
     let category: Category
     let subcategory: Subcategory
     
-    
     @Environment(OliveThisStore.self) private var store
-    @State private var units: [Unit] = []
+    @State var units: [Unit] = []
     @State private var isLoading: Bool = false
     @State private var showingAddScreen = false
 
@@ -34,6 +33,20 @@ struct UnitListScreen: View {
         
     }
     
+    private func deleteUnit(_ indexSet: IndexSet) {
+        for index in indexSet {
+            
+            let unit = units[index]
+            Task {
+                let isDeleted = try await store.deleteUnit(unit.unitID)
+                
+                if isDeleted {
+                    units.remove(at: index)
+                }
+            }
+        }
+    }
+    
     var body: some View {
         
         ZStack {
@@ -41,15 +54,28 @@ struct UnitListScreen: View {
             if units.isEmpty && !isLoading {
                 ContentUnavailableView("No items have been entered - Get Started! ", systemImage: "system.fill.circle")
             } else {
-                List(units) { unit in
-                    NavigationLink {
-                        UnitDetailScreen(unit: unit)
-                    } label: {
-                        UnitListCellView(unit: unit)
+                NavigationStack {
+                    List {
+                        ForEach(units, id: \.self) { unit in
+                            NavigationLink {
+                                UnitDetailScreen(unit: unit)
+                            } label: {
+                                UnitListCellView(unit: unit)
+                            }
+                        }
+                        .onDelete(perform: deleteUnit)
                     }
-                }.refreshable {
-                    await loadUnits()
                 }
+//                List(units) { unit in
+//                    NavigationLink {
+//                        UnitDetailScreen(unit: unit)
+//                    } label: {
+//                        UnitListCellView(unit: unit)
+//                    }
+//                }.refreshable {
+//                    await loadUnits()
+//                }
+//                .onDelete(perform: deleteUnit)
             }
         }
         .overlay(alignment: .center, content: {
@@ -59,7 +85,7 @@ struct UnitListScreen: View {
         })
         .sheet(isPresented: $showingAddScreen, content: {
             NavigationStack {
-                AddUnitScreen(categoryID: category.categoryID, subcategoryID: subcategory.subcategoryID)
+                AddUnitScreen(categoryID: category.categoryID, subcat: subcategory, units: $units)
             }
         })
         .task {

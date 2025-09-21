@@ -10,7 +10,7 @@ import Foundation
 enum HTTPMethod {
     case get([URLQueryItem])
     case post(Data?)
-    case delete
+    case delete([URLQueryItem])
     case put(Data?)
     
     var name: String {
@@ -64,7 +64,8 @@ struct HTTPClient {
         var request = URLRequest(url: resource.url)
         
         switch resource.method {
-            case .get(let queryItems):
+            case .get(let queryItems), .delete(let queryItems):
+                request.httpMethod = resource.method.name
                 var components = URLComponents(url: resource.url, resolvingAgainstBaseURL: false)
                 components?.queryItems = queryItems
                 guard let url = components?.url else {
@@ -78,8 +79,6 @@ struct HTTPClient {
                     print(resource.modelType)
                     print(jsonString)
                 }
-            case .delete:
-                request.httpMethod = resource.method.name
         }
         
         // add authorization header // accessToken

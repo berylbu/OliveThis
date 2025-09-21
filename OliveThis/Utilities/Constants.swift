@@ -47,8 +47,8 @@ struct Constants {
         
         //UNITS
         static let getUnits = URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/userunit")!
-        static let postUnit = URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/userunit")!
-
+        static let postUnit = URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/userunit/add")!
+        static let deleteUnit = URL(string: "https://oliveit-bsavb4aybuacaqb2.centralus-01.azurewebsites.net/userunit")!
  
     }
       

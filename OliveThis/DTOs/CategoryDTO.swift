@@ -32,9 +32,28 @@ struct Subcategory: Codable, Identifiable  {
     let subcategoryDescription: String?
     let link: URL?
     let iconattribution: String?
+    let subcategoryNameSingular: String?
+    var takesAddress: Bool = false
+    let triedPhrase: String?
     
     var id: Int {
         subcategoryID
+    }
+}
+
+extension Subcategory {
+    static var preview: Subcategory {
+        Subcategory(
+            subcategoryID: 1,
+            categoryID: 1,
+            subcategoryName: "Restaurants",
+            subcategoryDescription: "",
+            link: nil,
+            iconattribution: nil,
+            subcategoryNameSingular: "Restaurant",
+            takesAddress: true,
+            triedPhrase: "Have you eaten there?"
+        )
     }
 }
 

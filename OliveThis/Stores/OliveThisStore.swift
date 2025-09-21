@@ -70,13 +70,6 @@ class OliveThisStore {
         categories.append(category)
     }
     
-    func fetchUnitsByCatSubcat(_ categoryId: Int, subcategoryID: Int) async throws -> [Unit] {
-        let queryItems = [URLQueryItem(name: "cat", value: String(categoryId)), URLQueryItem(name: "subcat", value: String(subcategoryID))]
-        let resource = Resource(url: Constants.Urls.getUnits, method: .get(queryItems), modelType: UnitsResponse.self)
-        let unitsResponse = try await httpClient.load(resource)
-        return unitsResponse.data ?? []
-    }
-    
  
     func deleteSubcategory(_ productId: Int) async throws -> Bool {
 //        let resource = Resource(url: Constants.Urls.deleteProduct(productId), method: .delete, modelType: Bool.self)
@@ -98,8 +91,11 @@ class OliveThisStore {
     }
     
     func deleteProduct(_ productId: Int) async throws -> Bool {
-        let resource = Resource(url: Constants.Urls.deleteProduct(productId), method: .delete, modelType: Bool.self)
-        return try await httpClient.load(resource)
+        let queryItems = [URLQueryItem(name: "unit", value: String(productId))]
+        let resource = Resource(url: Constants.Urls.deleteUnit, method: .delete(queryItems), modelType: UnitsResponse.self)
+        //let resource = Resource(url: Constants.Urls.deleteProduct(productId), method: .delete, modelType: Bool.self)
+        //return try await httpClient.load(resource)
+        return true
     }
     
     func loadLocations() async throws {
@@ -108,10 +104,28 @@ class OliveThisStore {
     }
     
     
-    func createUnit(_ unit: CreateUnitRequest) async throws -> Unit? {
-       
-        let resource = Resource(url: Constants.Urls.postUnit, method: .post(try unit.encode()), modelType: UnitResponse.self)
-        let unitResponse = try await httpClient.load(resource)
-        return unitResponse.data
+    //UNITS
+    func fetchUnitsByCatSubcat(_ categoryId: Int, subcategoryID: Int) async throws -> [Unit] {
+        let queryItems = [URLQueryItem(name: "cat", value: String(categoryId)), URLQueryItem(name: "subcat", value: String(subcategoryID))]
+        let resource = Resource(url: Constants.Urls.getUnits, method: .get(queryItems), modelType: UnitsResponse.self)
+        let unitsResponse = try await httpClient.load(resource)
+        return unitsResponse.data ?? []
+    }
+    
+    func createUnit (_ unit: CreateUnitRequest) async throws -> [Unit] {
+        let resource = Resource(url: Constants.Urls.postUnit, method: .post(try unit.encode()), modelType: UnitsResponse.self)
+        let unitsResponse = try await httpClient.load(resource)
+        return unitsResponse.data ?? []
+    }
+    
+    func deleteUnit (_ unitId: Int64) async throws -> Bool  {
+        let queryItems = [URLQueryItem(name: "unitID", value: String(unitId))]
+        let resource = Resource(url: Constants.Urls.deleteUnit, method: .delete(queryItems), modelType: UnitsResponse.self)
+        if let _ = try? await httpClient.load(resource) {
+            return true
+        }
+        else {
+            return false
+        }
     }
 }

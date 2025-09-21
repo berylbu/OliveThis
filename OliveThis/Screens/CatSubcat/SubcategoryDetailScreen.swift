@@ -13,11 +13,12 @@ struct SubcategoryDetailScreen: View {
     
     var body: some View {
         Text("Subcategory Detail Screen")
+        Text(subcategory.subcategoryName)
     }
 }
 
 #Preview {
     NavigationStack {
-        ProductDetailScreen(product: Product.preview)
+        SubcategoryDetailScreen(subcategory: Subcategory.preview)
     }
 }

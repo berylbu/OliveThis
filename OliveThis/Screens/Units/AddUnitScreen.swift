@@ -9,9 +9,10 @@ import SwiftUI
 
 struct AddUnitScreen: View {
     
-    @State private var categoryID: Int
-    @State private var subcategoryID: Int
-
+    let categoryID: Int
+    let subcat: Subcategory
+    @Binding var units: [Unit]
+    
     @State private var name: String = ""
     @State private var genre: String? = ""
     @State private var note: String = ""
@@ -21,12 +22,19 @@ struct AddUnitScreen: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(OliveThisStore.self) private var store
     
+//    init(categoryID: Int, subcategoryID: Int, subcategoryName: String) {
+//        self.categoryID = categoryID
+//        self.subcat = Subcategory(categoryID: categoryID, subcategoryID: subcategoryID, subcategoryName: subcategoryName, triedPhrase = triedPhrase, takesAddress: takesAddress)
+//    }
     
-    
-    init(categoryID: Int, subcategoryID: Int) {
-        self.categoryID = categoryID
-        self.subcategoryID = subcategoryID
-    }
+//    private func loadUnits() async {
+//        do {
+//            units = try await store.fetchUnitsByCatSubcat(categoryID, subcategoryID: subcat.subcategoryID)
+//        } catch {
+//            print(error.localizedDescription)
+//        }
+//        
+//    }
     
     private var isFormValid: Bool {
         !name.isEmptyOrWhitespace
@@ -37,9 +45,9 @@ struct AddUnitScreen: View {
     private func saveUnit() async {
         
         do {
-            let createUnitRequest = CreateUnitRequest(categoryID: categoryID, subcategoryID: subcategoryID, genre: genre, userTried: userTried, rating: rating, name: name, notes: note, personFirstName: "", personLastName: "", secondPersonFirstName: "", secondPersonLastName: "", address1: "", address2: "", city: "", region: "", postalCode: "", telephoneNumber: "", telephoneNumber2: "", webLink: "", imageLink: "", recByFirstName: "", recByLastName: "", recByAppUserID: "")
+            let createUnitRequest = CreateUnitRequest(categoryID: categoryID, subcategoryID: subcat.subcategoryID, genre: genre, userTried: userTried, rating: rating, name: name, notes: note, personFirstName: "", personLastName: "", secondPersonFirstName: "", secondPersonLastName: "", address1: "", address2: "", city: "", region: "", postalCode: "", telephoneNumber: "", telephoneNumber2: "", webLink: "", imageLink: "", recByFirstName: "", recByLastName: "", recByAppUserID: "")
             
-            _ = try await store.createUnit(createUnitRequest)
+            units = try await store.createUnit(createUnitRequest)
              
         } catch {
             print(error.localizedDescription)
@@ -58,12 +66,21 @@ struct AddUnitScreen: View {
             
             Section {
                 TextField("Name", text: $name)
-                Text("Notes:").font(.headline)
-                TextEditor(text: $note)
-                    .frame(height: 100)
+                Toggle(isOn: $userTried) {
+                            Text("Have you tried it?")
+                        }
+                        .toggleStyle(CheckboxToggleStyle())
+            }
+            
+            if userTried {
+                Section("Write a review"){
+                    TextEditor(text: $note)
+                    RatingView(rating: $rating)
+                }
             }
             
         }
+        .navigationTitle("Add a \(subcat.subcategoryNameSingular ?? "temp")")
 //        .task {
 //            do {
 //                try await store.loadCategories()
@@ -81,6 +98,7 @@ struct AddUnitScreen: View {
            ToolbarItem(placement: .topBarTrailing) {
                Button("Save") {
                    Task { await saveUnit() }
+                   dismiss()
                }.disabled(!isFormValid)
            }
         }
@@ -88,7 +106,9 @@ struct AddUnitScreen: View {
 }
 
 #Preview {
-    CategoryListScreen()
+//    NavigationStack {
+//        AddUnitScreen(categoryID: 1, subcat: Subcategory.preview, units: units)
+//    }.environment(OliveThisStore(httpClient: HTTPClient()))
     
 }
 
