@@ -40,7 +40,9 @@ struct UnitListScreen: View {
                 ContentUnavailableView("No items have been entered - Get Started! ", systemImage: "system.fill.circle")
             } else {
                 List(units) { unit in
-                    NavigationLink(destination: UnitDetailScreen(unit: unit)) {
+                    NavigationLink {
+                        UnitDetailScreen(unit: unit)
+                    } label: {
                         UnitCellView(unit: unit)
                     }
                 }.refreshable {
@@ -62,7 +64,9 @@ struct UnitListScreen: View {
 
 #Preview {
     NavigationStack {
-        CategoryListScreen()
+        UnitListScreen(
+            category: Category(categoryID: 1, categoryName: "Food", categoryDescription: "Restaurants, recipes, etc.", link: nil, iconattribution: "", sortID: 1),
+            subcategory: Subcategory(subcategoryID: 1, categoryID: 1, subcategoryName: "Dairy", subcategoryDescription: "Milk, cheese, etc.", link: nil, iconattribution: nil))
     }.environment(OliveThisStore(httpClient: HTTPClient()))
 }
 
@@ -72,7 +76,15 @@ struct UnitCellView: View {
     
     var body: some View {
         HStack {
-            Text(unit.name)
+           EmojiRatingView(rating: unit.rating)
+                .font(.largeTitle)
+            VStack(alignment: .leading) {
+                Text(unit.name)
+                    .font(.headline)
+                
+                Text(unit.genre ?? "" )
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }
