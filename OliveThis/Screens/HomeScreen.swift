@@ -32,15 +32,23 @@ struct HomeScreen: View {
                     LocationsScreen()
                 }
             } label: {
-                Label("Recs to Follow", systemImage: "staroflife")
+                Label("Recs to Follow", systemImage: "map")
             }
             
             Tab {
                 NavigationStack {
-                    LocationsScreen()
+                    TestLocComplex()
                 }
             } label: {
-                Label("Share", systemImage: "square.and.arrow.up")
+                Label("Map", systemImage: "square.and.arrow.up")
+            }
+            
+            Tab {
+                NavigationStack {
+                    TestLocHacking()
+                }
+            } label: {
+                Label("Map3", systemImage: "square.and.arrow.up")
             }
             
             Tab {

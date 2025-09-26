@@ -10,9 +10,22 @@
 		AD9D304B2E60E12300B64519 /* OliveThis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OliveThis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AD9A6C332E81F92C0083D1F0 /* Exceptions for "OliveThis" folder in "OliveThis" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = AD9D304A2E60E12300B64519 /* OliveThis */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AD9D304D2E60E12300B64519 /* OliveThis */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AD9A6C332E81F92C0083D1F0 /* Exceptions for "OliveThis" folder in "OliveThis" target */,
+			);
 			path = OliveThis;
 			sourceTree = "<group>";
 		};
@@ -256,6 +269,8 @@
 				DEVELOPMENT_TEAM = NX9ML5DQ5P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OliveThis/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app will help you locate the item you are adding / editing based on location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -284,6 +299,8 @@
 				DEVELOPMENT_TEAM = NX9ML5DQ5P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OliveThis/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app will help you locate the item you are adding / editing based on location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

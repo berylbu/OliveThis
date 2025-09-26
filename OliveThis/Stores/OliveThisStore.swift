@@ -17,6 +17,7 @@ class OliveThisStore {
     var locations: [Location] = []
     var categoriesAll: [CategoriesAll] = []
     var units: [Unit] = []
+    //var countries: [String]
     
     init(httpClient: HTTPClient) {
         self.httpClient = httpClient
@@ -91,10 +92,10 @@ class OliveThisStore {
     }
     
     func deleteProduct(_ productId: Int) async throws -> Bool {
-        let queryItems = [URLQueryItem(name: "unit", value: String(productId))]
-        let resource = Resource(url: Constants.Urls.deleteUnit, method: .delete(queryItems), modelType: UnitsResponse.self)
-        //let resource = Resource(url: Constants.Urls.deleteProduct(productId), method: .delete, modelType: Bool.self)
-        //return try await httpClient.load(resource)
+//        let queryItems = [URLQueryItem(name: "unit", value: String(productId))]
+//        let resource = Resource(url: Constants.Urls.deleteUnit, method: .delete(queryItems), modelType: UnitsResponse.self)
+//        //let resource = Resource(url: Constants.Urls.deleteProduct(productId), method: .delete, modelType: Bool.self)
+//        //return try await httpClient.load(resource)
         return true
     }
     

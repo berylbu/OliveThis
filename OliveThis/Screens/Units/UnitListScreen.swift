@@ -58,7 +58,7 @@ struct UnitListScreen: View {
                     List {
                         ForEach(units, id: \.self) { unit in
                             NavigationLink {
-                                UnitDetailScreen(unit: unit)
+                                UnitDetailScreen(subcat: subcategory, unit: unit)
                             } label: {
                                 UnitListCellView(unit: unit)
                             }
@@ -66,16 +66,6 @@ struct UnitListScreen: View {
                         .onDelete(perform: deleteUnit)
                     }
                 }
-//                List(units) { unit in
-//                    NavigationLink {
-//                        UnitDetailScreen(unit: unit)
-//                    } label: {
-//                        UnitListCellView(unit: unit)
-//                    }
-//                }.refreshable {
-//                    await loadUnits()
-//                }
-//                .onDelete(perform: deleteUnit)
             }
         }
         .overlay(alignment: .center, content: {

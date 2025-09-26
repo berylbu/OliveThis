@@ -6,16 +6,19 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct UnitDetailScreen: View {
     
+    let subcat: Subcategory
     @State var unit: Unit
+    
     @State private var showingDeleteAlert = false
 
     var body: some View {
         
         ScrollView {
-            UnitCellView(unit: unit)
+            UnitCellView(unit: unit, subcat: subcat)
         }
         .scrollBounceBehavior(.basedOnSize)
         .alert("Delete", isPresented: $showingDeleteAlert) {
@@ -45,47 +48,31 @@ struct UnitDetailScreen: View {
 }
 
 #Preview {
-    UnitDetailScreen(unit: Unit(
-          unitID: 1,
-          categoryID: 1,
-          subcategoryID: 1,
-          appUserID: "userid",
-          genre: "burger",
-          createdDate: "1/1/2020",
-          lastEditedDate: "1/1/2020",
-          userTried: false,
-          rating: 1,
-          name: "In N Out",
-          notes: "Owner is an asshole"
-      ))
-}
-
-struct UnitCellView: View {
-    
-    let unit: Unit
-    
-    var body: some View {
-        
-        VStack {
-            
-            Text(unit.name.uppercased())
-                .fontWeight(.black)
-                .padding(8)
-                .foregroundStyle(.white)
-                .background(.black.opacity(0.7))
-                .clipShape(Capsule())
-        
-            Text(unit.genre ?? "")
-                .font(.title)
-                .foregroundStyle(.secondary)
-            
-            Text(unit.notes ?? "")
-                .padding()
-            
-            RatingView(rating: .constant(unit.rating))
-                .font(.largeTitle)
-            
-        }
-    }
+    UnitDetailScreen(
+        subcat: Subcategory(
+            subcategoryID: 1,
+            categoryID: 1,
+            subcategoryName: "Restaurant",
+            subcategoryDescription: "",
+            link: nil,
+            iconattribution: "",
+            subcategoryNameSingular: "Restaurant",
+            takesAddress: true,
+            triedPhrase: "Have you eaten there?"),
+        unit: Unit(
+            unitID: 1,
+            categoryID: 1,
+            subcategoryID: 1,
+            appUserID: "userid",
+            genre: "burger",
+            createdDate: "1/1/2020",
+            lastEditedDate: "1/1/2020",
+            userTried: false,
+            rating: 1,
+            name: "In N Out",
+            notes: "Owner is an asshole",
+            latitude: 33.99265,
+            longitude: 118.44602)
+    )
 }
 
