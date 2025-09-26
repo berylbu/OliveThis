@@ -13,7 +13,8 @@ struct UnitListScreen: View {
     let subcategory: Subcategory
     
     @Environment(OliveThisStore.self) private var store
-    @State var units: [Unit] = []
+    
+    @State var unitList: [Unit] = []
     @State private var isLoading: Bool = false
     @State private var showingAddScreen = false
 
@@ -26,7 +27,7 @@ struct UnitListScreen: View {
         defer { isLoading = false }
 
         do {
-            units = try await store.fetchUnitsByCatSubcat(category.categoryID, subcategoryID: subcategory.subcategoryID)
+            unitList = try await store.fetchUnitsByCatSubcat(category.categoryID, subcategoryID: subcategory.subcategoryID)
         } catch {
             print(error.localizedDescription)
         }
@@ -36,12 +37,12 @@ struct UnitListScreen: View {
     private func deleteUnit(_ indexSet: IndexSet) {
         for index in indexSet {
             
-            let unit = units[index]
+            let unit = unitList[index]
             Task {
                 let isDeleted = try await store.deleteUnit(unit.unitID)
                 
                 if isDeleted {
-                    units.remove(at: index)
+                    unitList.remove(at: index)
                 }
             }
         }
@@ -51,12 +52,12 @@ struct UnitListScreen: View {
         
         ZStack {
             
-            if units.isEmpty && !isLoading {
-                ContentUnavailableView("No items have been entered - Get Started! ", systemImage: "system.fill.circle")
+            if unitList.isEmpty && !isLoading {
+                ContentUnavailableView("No /{subcategory.subcategoryName} have been entered - Get started by clicking on the plus sign! ", systemImage: "system.fill.circle")
             } else {
                 NavigationStack {
                     List {
-                        ForEach(units, id: \.self) { unit in
+                        ForEach(unitList, id: \.self) { unit in
                             NavigationLink {
                                 UnitDetailScreen(subcat: subcategory, unit: unit)
                             } label: {
@@ -75,7 +76,7 @@ struct UnitListScreen: View {
         })
         .sheet(isPresented: $showingAddScreen, content: {
             NavigationStack {
-                AddUnitScreen(categoryID: category.categoryID, subcat: subcategory, units: $units)
+                AddUnitScreen(categoryID: category.categoryID, subcat: subcategory, unitList: $unitList)
             }
         })
         .task {
@@ -93,24 +94,25 @@ struct UnitListScreen: View {
 }
 
 #Preview {
-    CategoryListScreen()
+    UnitListScreen(
+        category: Category(
+            categoryID: 1,
+            categoryName: "Food",
+            categoryDescription: "food",
+            link: nil,
+            iconattribution: "",
+            sortID: 1
+        ),
+        subcategory:  Subcategory(
+           subcategoryID: 1,
+           categoryID: 1,
+           subcategoryName: "Restaurants",
+           subcategoryDescription: "",
+           link: nil, iconattribution: "",
+           subcategoryNameSingular: "Restaurant",
+           takesAddress: true,
+           triedPhrase: "Have you eaten there?")
+    ).environment(OliveThisStore(httpClient: HTTPClient()))
 }
 
-struct UnitListCellView: View {
-    
-    let unit: Unit
-    
-    var body: some View {
-        HStack {
-           EmojiRatingView(rating: unit.rating)
-                .font(.largeTitle)
-            VStack(alignment: .leading) {
-                Text(unit.name)
-                    .font(.headline)
-                
-                Text(unit.genre ?? "" )
-                    .foregroundStyle(.secondary)
-            }
-        }
-    }
-}
+

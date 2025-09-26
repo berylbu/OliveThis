@@ -16,7 +16,7 @@ class OliveThisStore {
     var categories: [Category] = []
     var locations: [Location] = []
     var categoriesAll: [CategoriesAll] = []
-    var units: [Unit] = []
+    var unitList: [Unit] = []
     //var countries: [String]
     
     init(httpClient: HTTPClient) {
@@ -116,6 +116,9 @@ class OliveThisStore {
     func createUnit (_ unit: CreateUnitRequest) async throws -> [Unit] {
         let resource = Resource(url: Constants.Urls.postUnit, method: .post(try unit.encode()), modelType: UnitsResponse.self)
         let unitsResponse = try await httpClient.load(resource)
+        if unitsResponse.error == nil {
+            unitList = unitsResponse.data ?? []
+        }
         return unitsResponse.data ?? []
     }
     

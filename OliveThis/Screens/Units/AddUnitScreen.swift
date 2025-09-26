@@ -11,7 +11,7 @@ struct AddUnitScreen: View {
     
     let categoryID: Int
     let subcat: Subcategory
-    @Binding var units: [Unit]
+    @Binding var unitList: [Unit]
     
     @State private var name: String = ""
     @State private var genre: String? = ""
@@ -57,7 +57,7 @@ struct AddUnitScreen: View {
         do {
             let createUnitRequest = CreateUnitRequest(categoryID: categoryID, subcategoryID: subcat.subcategoryID, genre: genre, userTried: userTried, rating: rating, name: name, notes: note, personFirstName: personFirstName, personLastName: personLastName, secondPersonFirstName: secondPersonFirstName, secondPersonLastName: secondPersonLastName, address1: address1, address2: address2, city: city, region: region, postalCode: postalCode, telephoneNumber: telephoneNumber, telephoneNumber2: telephoneNumber2, webLink: webLink, imageLink: imageLink, recByFirstName: recByFirstName, recByLastName: recByLastName, recByAppUserID: recByAppUserID)
             
-            units = try await store.createUnit(createUnitRequest)
+            unitList = try await store.createUnit(createUnitRequest)
              
         } catch {
             print(error.localizedDescription)
